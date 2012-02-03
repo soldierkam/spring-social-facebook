@@ -15,6 +15,7 @@
  */
 package org.springframework.social.facebook.api.impl;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,8 +90,24 @@ class PageTemplate extends AbstractFacebookOperations implements PageOperations 
 		parts.set("access_token", pageAccessToken);
 		return graphApi.publish(albumId, "photos", parts);
 	}
-	
-	// private helper methods
+
+    @Override
+    public String shareLink(String pageId, String message, URL linkToPost, URL photo) {
+        requireAuthorization();
+        String pageAccessToken = getPageAccessToken(pageId);
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
+        parts.set("link", linkToPost.toString());
+        if(message != null) {
+            parts.set("message", message);
+        }
+        if(photo!=null){
+            parts.set("image", photo);
+        }
+        parts.set("access_token", pageAccessToken);
+        return graphApi.publish(pageId, "links", parts);
+    }
+
+    // private helper methods
 	
 	private Map<String, Account> accountCache = new HashMap<String, Account>();
 	

@@ -15,11 +15,13 @@
  */
 package org.springframework.social.facebook.api;
 
+import java.net.URL;
 import java.util.List;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.social.ApiException;
 import org.springframework.social.InsufficientPermissionException;
 import org.springframework.social.MissingAuthorizationException;
@@ -111,5 +113,19 @@ public interface PageOperations {
 	 * @throws MissingAuthorizationException if FacebookTemplate was not created with an access token.
 	 */
 	String postPhoto(String pageId, String albumId, Resource photo, String caption);
-	
+
+    /**
+     * Share link as the page administrator.
+     * Requires that the application is granted "share_item" permission and that the authenticated user be an administrator of the page.
+     * @param pageId the page ID
+     * @param message Message to post. May be null
+     * @param linkToPost Link to share
+     * @param photo Image from links destination, which will act as thumbnail. May be null
+     * @throws ApiException if there is an error while communicating with Facebook.
+     * @throws InsufficientPermissionException if the user has not granted "manage_pages" permission.
+     * @throws PageAdministrationException if the user is not a page administrator.
+     * @throws MissingAuthorizationException if FacebookTemplate was not created with an access token.
+     * @return the ID of the photo.
+     */
+    String shareLink(String pageId, String message, URL linkToPost, URL photo);
 }
